@@ -16,6 +16,7 @@ import vn.apartment.master.service.RecordService;
 import vn.apartment.master.service.RenterService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Interactor
 public class AddRecord {
@@ -41,6 +42,12 @@ public class AddRecord {
     @Transactional
     public void saveNewRecord(AddRecordDTO recordDTO) {
         Owner hadOwner = ownerService.findHeadOwnerById(recordDTO.getOwnerId());
+
+        Optional<Record> hadRecord = recordService.retrieveRecordByOwnerId(hadOwner.getOwnerId());
+        if (hadRecord.isPresent()) {
+            throw new InvalidParameterException("The record already exists.");
+        }
+
         hadOwner.setOccupancy(false);
         List<Owner> hadOwners = ownerService.getOwnerByHousehold(hadOwner.getHousehold().getHouseholdId());
         hadOwners.forEach(owner -> owner.setOccupancy(false));

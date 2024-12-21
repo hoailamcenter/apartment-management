@@ -18,6 +18,7 @@ public class RenterQuerySpec {
     private static final String RENTER_LAST_NAME = "lastName";
     private static final String RENTER_EMAIL = "email";
     private static final String RENTER_PHONE = "phoneNumber";
+    private static final String RENTER_MIDDLE = "middleName";
 
     private static final Map<String, String> SORTED_FIELDS = Maps.newHashMap();
     static {
@@ -45,6 +46,7 @@ public class RenterQuerySpec {
             queries.add(cb.like(root.get(RENTER_LAST_NAME), keyword));
             queries.add(cb.like(root.get(RENTER_EMAIL), keyword));
             queries.add(cb.like(root.get(RENTER_PHONE), keyword));
+            queries.add(cb.like(root.get(RENTER_MIDDLE), keyword));
 
             Predicate pQuery = cb.or(queries.toArray(new Predicate[0]));
             predicates.add(pQuery);

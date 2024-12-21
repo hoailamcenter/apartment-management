@@ -9,8 +9,8 @@
     </parent>
     <artifactId>apartment-master-dto</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>apartment-master-dto</name>
-    <description>apartment-master-dto</description>
+    <name>Apartment Master Dto</name>
+    <description>Apartment Master Dto</description>
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

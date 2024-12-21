@@ -31,6 +31,11 @@ public class RecordService {
 
     public void delete(final String recordId) {
         Record hadRecord = findRecordByRecordId(recordId);
+        recordRepo.delete(hadRecord);
+    }
+
+    public void disable(final String recordId) {
+        Record hadRecord = findRecordByRecordId(recordId);
         hadRecord.setDeleted(true);
     }
 

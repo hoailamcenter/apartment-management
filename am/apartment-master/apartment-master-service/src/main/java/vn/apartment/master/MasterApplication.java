@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import vn.apartment.core.mvc.anotation.WebMvc;
 import vn.apartment.notification.client.MailClient;
 
+
 @WebMvc
 @EnableTransactionManagement
 @EntityScan(basePackages = {"vn.apartment.master.entity"})

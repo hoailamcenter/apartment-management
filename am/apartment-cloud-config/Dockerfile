@@ -1,12 +1,11 @@
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:11-jdk-alpine
 
 WORKDIR /app
 
 COPY target/*.jar config.jar
 
-EXPOSE ${CLOUD_CONFIG_PORT}
+COPY src/main/resources/banner.txt /app/banner.txt
 
-ENV CLOUD_CONFIG_PORT=${CLOUD_CONFIG_PORT}
-ENV EUREKA_ZONE_URI=${EUREKA_ZONE_URI}
+EXPOSE ${CLOUD_CONFIG_PORT}
 
 CMD ["java", "-jar", "config.jar"]

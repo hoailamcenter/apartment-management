@@ -15,7 +15,7 @@ import vn.apartment.master.service.RenterService;
 import java.util.List;
 
 @Interactor
-public class RemoveRecord {
+public class DisableRecord {
     @Autowired
     private RecordService recordService;
     @Autowired
@@ -30,10 +30,10 @@ public class RemoveRecord {
         }
         Record hadRecord = recordService.findRecordByRecordId(recordId);
         List<Renter> hadRenters = renterService.getRenterByRecord(recordId);
-        hadRenters.forEach(renter -> renterService.delete(renter.getRenterId()));
+        hadRenters.forEach(renter -> renterService.disable(renter.getRenterId()));
         Owner hadOwner = ownerService.findHeadOwnerById(hadRecord.getOwner().getOwnerId());
         hadOwner.setOccupancy(true);
         ownerService.saveOrUpdate(hadOwner);
-        recordService.delete(recordId);
+        recordService.disable(recordId);
     }
 }

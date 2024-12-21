@@ -19,6 +19,7 @@ public class OwnerQuerySpec {
     private static final String OWNER_LAST_NAME = "lastName";
     private static final String OWNER_EMAIL = "email";
     private static final String OWNER_PHONE = "phoneNumber";
+    private static final String OWNER_MIDDLE = "middleName";
 
     private static final Map<String, String> SORTED_FIELDS = Maps.newHashMap();
     static {
@@ -46,6 +47,7 @@ public class OwnerQuerySpec {
             queries.add(cb.like(root.get(OWNER_LAST_NAME), keyword));
             queries.add(cb.like(root.get(OWNER_EMAIL), keyword));
             queries.add(cb.like(root.get(OWNER_PHONE), keyword));
+            queries.add(cb.like(root.get(OWNER_MIDDLE), keyword));
 
             Predicate pQuery = cb.or(queries.toArray(new Predicate[0]));
             predicates.add(pQuery);

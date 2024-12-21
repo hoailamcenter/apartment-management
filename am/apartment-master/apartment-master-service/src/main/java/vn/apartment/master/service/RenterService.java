@@ -34,6 +34,11 @@ public class RenterService {
 
     public void delete(final String renterId) {
         Renter hadRenter = findRenterById(renterId);
+        renterRepo.delete(hadRenter);
+    }
+
+    public void disable(final String renterId) {
+        Renter hadRenter = findRenterById(renterId);
         hadRenter.setDeleted(true);
     }
 

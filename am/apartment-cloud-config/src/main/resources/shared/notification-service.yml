@@ -13,7 +13,6 @@ spring:
     username: noreply
     password: admin1!
 
-
 ---
 
 eureka:

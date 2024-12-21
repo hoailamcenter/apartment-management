@@ -60,7 +60,8 @@ public class CheckExpiredInvoice {
     @Autowired
     private InvoiceSettingService invoiceSettingService;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    //@Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "*/30 * * * * *")
     @Transactional
     public void execute() {
         LOG.info("Starting check expired records job");
@@ -159,7 +160,6 @@ public class CheckExpiredInvoice {
                 .parameter("resident_name", residentInfo.getName())
                 .parameter("apartment_name", apartmentName)
                 .parameter("payment_deadline", format(info.getPaymentDeadline()))
-                .parameter("invoice_id", info.getInvoiceId())
                 .parameter("created_date", format(info.getCreateDate()))
                 .parameter("status", info.getStatus())
                 .parameter("total", info.getTotal())

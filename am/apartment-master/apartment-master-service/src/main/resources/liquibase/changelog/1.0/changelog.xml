@@ -15,5 +15,4 @@
     <include file="service_detail-changelog.xml" relativeToChangelogFile="true"/>
     <include file="invoice_setting-changelog.xml" relativeToChangelogFile="true"/>
     <include file="invoice-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="migration-changelog.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

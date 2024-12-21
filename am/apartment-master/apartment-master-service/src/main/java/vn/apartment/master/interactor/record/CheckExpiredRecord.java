@@ -16,9 +16,10 @@ public class CheckExpiredRecord {
     @Autowired
     private RecordService recordService;
     @Autowired
-    private RemoveRecord removeRecord;
+    private DisableRecord disableRecord;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    //@Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "*/30 * * * * *")
     public void execute() {
         LOG.info("Starting check expired records job");
         Date today = new Date();
@@ -26,9 +27,8 @@ public class CheckExpiredRecord {
                 .stream()
                 .filter(record -> DateUtils.isSameDay(record.getEndDate(), today))
                 .forEach(record -> {
-                    removeRecord.execute(record.getRecordId());
+                    disableRecord.execute(record.getRecordId());
                     LOG.debug("Marking record {} as deleted", record.getRecordId());
                 });
     }
-
 }

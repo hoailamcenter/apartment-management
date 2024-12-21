@@ -32,10 +32,7 @@ import vn.apartment.notification.dto.mail.Priority;
 import vn.apartment.notification.dto.template.InvoiceMailTemplate;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.stream.Collectors;
 
@@ -44,7 +41,7 @@ public class AddInvoice {
 
     private static final Logger LOG = LoggerFactory.getLogger(AddInvoice.class);
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yy");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
 
     @Autowired
     private InvoiceService invoiceService;
@@ -75,6 +72,7 @@ public class AddInvoice {
         }
         Invoice invoice = saveNewInvoice(invoiceDTO);
         sendMail(invoice);
+        serviceDetailService.updateServiceDetail(invoiceDTO.getApartmentId());
     }
 
     private void sendMail(Invoice invoice) {
@@ -129,7 +127,6 @@ public class AddInvoice {
                 .parameter("resident_name", residentInfo.getName())
                 .parameter("apartment_name", apartmentName)
                 .parameter("payment_deadline", format(info.getPaymentDeadline()))
-                .parameter("invoice_id", info.getInvoiceId())
                 .parameter("created_date", format(info.getCreateDate()))
                 .parameter("status", info.getStatus())
                 .parameter("total", info.getTotal())
@@ -173,9 +170,9 @@ public class AddInvoice {
 
         List<ServiceDetail> serviceDetails = serviceDetailService.getServiceDetailByApartment(invoiceDTO.getApartmentId());
 
-        BigDecimal totalAmount = calculateTotalAmount(serviceDetails);
+        BigDecimal totalAmount = serviceDetailService.calculateTotalAmount(serviceDetails);
 
-        Date extraPaymentDeadline = calculateExtraPaymentDeadline(invoice.getPaymentDeadline(), invoiceSetting.getMaxExpiredTime());
+        Date extraPaymentDeadline = invoiceService.calculateExtraPaymentDeadline(invoice.getPaymentDeadline(), invoiceSetting.getMaxExpiredTime());
 
         invoice.setTotal(totalAmount);
         invoice.setExtraPaymentDeadline(extraPaymentDeadline);
@@ -185,20 +182,5 @@ public class AddInvoice {
 
     public static String format(Date date) {
         return DATE_FORMAT.format(date);
-    }
-
-    public BigDecimal calculateTotalAmount(List<ServiceDetail> serviceDetails) {
-        BigDecimal totalAmount = BigDecimal.ZERO;
-        for (ServiceDetail serviceDetail : serviceDetails) {
-            totalAmount = totalAmount.add(serviceDetail.getMoney());
-        }
-        return totalAmount;
-    }
-
-    public Date calculateExtraPaymentDeadline(Date paymentDeadline, int maxExpiredTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(paymentDeadline);
-        calendar.add(Calendar.DAY_OF_YEAR, maxExpiredTime);
-        return calendar.getTime();
     }
 }

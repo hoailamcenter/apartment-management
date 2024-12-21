@@ -13,6 +13,7 @@ import vn.apartment.master.dto.invoice.InvoiceStatus;
 import vn.apartment.master.entity.apartment.Apartment;
 import vn.apartment.master.entity.record.Invoice;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -82,5 +83,12 @@ public class InvoiceService {
         }
         return invoiceRepo.findAll(newSpecification(apiQuery),
                 PageableUtils.of(apiQuery, supportedFields()));
+    }
+
+    public Date calculateExtraPaymentDeadline(Date paymentDeadline, int maxExpiredTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(paymentDeadline);
+        calendar.add(Calendar.DAY_OF_YEAR, maxExpiredTime);
+        return calendar.getTime();
     }
 }

@@ -9,6 +9,7 @@ import vn.apartment.master.dao.ServiceDetailRepo;
 import vn.apartment.master.entity.apartment.Apartment;
 import vn.apartment.master.entity.service.ServiceDetail;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,23 @@ public class ServiceDetailService {
 
     public Optional<ServiceDetail> retrieveServiceDetailById(String serviceDetailId) {
         return serviceDetailRepo.findByServiceDetailId(serviceDetailId);
+    }
+
+    public void updateServiceDetail(final String apartmentId){
+        List<ServiceDetail> serviceDetails = getServiceDetailByApartment(apartmentId);
+        for (ServiceDetail serviceDetail : serviceDetails) {
+            if (serviceDetail.getService().getMeteredService().equals(Boolean.TRUE)) {
+                serviceDetail.setOldValue(serviceDetail.getNewValue());
+                saveOrUpdate(serviceDetail);
+            }
+        }
+    }
+
+    public BigDecimal calculateTotalAmount(List<ServiceDetail> serviceDetails) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (ServiceDetail serviceDetail : serviceDetails) {
+            totalAmount = totalAmount.add(serviceDetail.getMoney());
+        }
+        return totalAmount;
     }
 }

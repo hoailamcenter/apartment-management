@@ -12,9 +12,6 @@ public class UpdateServiceDetailDTO {
     @JsonProperty(value = "new_value", required = true)
     private double newValue;
 
-    @JsonProperty(value = "old_value", required = true)
-    private double oldValue;
-
     @JsonProperty(value = "amount_of_using", required = true)
     private double amountOfUsing;
 
@@ -36,14 +33,6 @@ public class UpdateServiceDetailDTO {
 
     public void setNewValue(double newValue) {
         this.newValue = newValue;
-    }
-
-    public double getOldValue() {
-        return oldValue;
-    }
-
-    public void setOldValue(double oldValue) {
-        this.oldValue = oldValue;
     }
 
     public double getAmountOfUsing() {

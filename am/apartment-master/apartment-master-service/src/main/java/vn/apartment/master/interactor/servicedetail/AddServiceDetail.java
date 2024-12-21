@@ -49,7 +49,7 @@ public class AddServiceDetail {
         newServiceDetail.setServiceDetailId(Generators.uuid());
         newServiceDetail.setApartment(hadApartment);
         newServiceDetail.setService(hadService);
-        newServiceDetail.setOldValue(hadApartment.getStatus() == ApartmentStatus.AVAILABLE ? 0 : newServiceDetail.getOldValue());
+        newServiceDetail.setOldValue(0);
         newServiceDetail.setNewValue(hadApartment.getStatus() == ApartmentStatus.AVAILABLE ? 0 : newServiceDetail.getNewValue());
         newServiceDetail.setAmountOfUsing(newServiceDetail.getNewValue() - newServiceDetail.getOldValue());
         if (hadService.getMeteredService().equals(Boolean.TRUE)){

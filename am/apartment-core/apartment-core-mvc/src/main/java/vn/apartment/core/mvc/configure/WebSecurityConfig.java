@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] WHITELISTS_URIS = {
         "/global/**", // Global Public API
         "/docs/**", // Spring OPEN API
-        "/actuator/**" // Monitor Actuator
+        "/actuator/**", // Monitor Actuator
     };
 
     @Override
@@ -91,5 +91,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationEntryPoint apartmentAuthenticationEntryPoint() {
         return new ApartmentAuthenticationEntryPoint();
     }
-
 }

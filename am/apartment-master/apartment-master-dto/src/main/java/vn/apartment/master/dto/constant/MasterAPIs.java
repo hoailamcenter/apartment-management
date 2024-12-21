@@ -27,4 +27,6 @@ public class MasterAPIs {
     public static final String RECORD_API = API + "/records";
 
     public static final String INVOICE_SETTING_API = API + "/invoice_setting";
+
+    public static final String PAID_INVOICE_API = INVOICE_API + "/approved/{invoiceId}";
 }

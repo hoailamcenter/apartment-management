@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 import vn.apartment.apartment.core.utils.Dates;
 import vn.apartment.notification.document.Mail;
 import vn.apartment.notification.dto.enums.MailStatus;
+import vn.apartment.notification.dto.template.InvoiceMailTemplate;
+import vn.apartment.notification.dto.template.RemindMailTemplate;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class MailSenderService {
@@ -33,15 +39,23 @@ public class MailSenderService {
             return;
         }
 
-        SimpleMailMessage msg = newSimpleMailMessage(mail);
-
         try {
 
             LOG.info("Sending the mail {}", mail.getId());
 
-            updateMail(mail, MailStatus.IN_PROGRESS);
+            if (mail.getTemplate() != null
+                    && (mail.getTemplate().getId().equals(InvoiceMailTemplate.ADD_INVOICE_TEMPLATE.id())
+                    || mail.getTemplate().getId().equals(RemindMailTemplate.REMIND_INVOICE_TEMPLATE.id()))) {
+                MimeMessage mimeMessage = newMimeMessage(mail);
 
-            javaMailSender.send(msg);
+                updateMail(mail, MailStatus.IN_PROGRESS);
+                javaMailSender.send(mimeMessage);
+            } else {
+                SimpleMailMessage simpleMessage = newSimpleMailMessage(mail);
+
+                updateMail(mail, MailStatus.IN_PROGRESS);
+                javaMailSender.send(simpleMessage);
+            }
 
             updateMail(mail, MailStatus.SENT);
 
@@ -75,6 +89,16 @@ public class MailSenderService {
         msg.setBcc(mail.getBcc().toArray(new String[]{}));
         msg.setSubject(mail.getSubject());
         msg.setText(mail.getContent());
+        return msg;
+    }
+
+    private MimeMessage newMimeMessage(Mail mail) throws MessagingException {
+        MimeMessage msg = javaMailSender.createMimeMessage();
+        msg.setFrom(new InternetAddress(mail.getFrom()));
+        msg.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(String.join(",", mail.getTo())));
+        msg.setRecipients(MimeMessage.RecipientType.BCC, InternetAddress.parse(String.join(",", mail.getBcc())));
+        msg.setSubject(mail.getSubject());
+        msg.setContent(mail.getContent(), "text/html; charset=UTF-8");
         return msg;
     }
 }
